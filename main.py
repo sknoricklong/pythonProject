@@ -150,4 +150,4 @@ if __name__ == '__main__':
     st.markdown("**#Data**")
     st.write(compare.sort_values(by=['prof', 'year']))
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
-
+# Commit instructions: https://www.youtube.com/watch?v=ONaPg5QKC8Q
