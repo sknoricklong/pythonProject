@@ -123,6 +123,7 @@ if __name__ == '__main__':
     comparison_data.columns = ['Instructor', 'Workload']
     comparison_data.sort_values(by='Instructor', ascending=False, inplace=True)
 
+    st.markdown("**Instructor and Workload Scores (Ranked from Highest to Lowest Instructor Score)**")
     chart = px.bar(
         comparison_data,
         barmode="group",
