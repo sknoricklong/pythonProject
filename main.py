@@ -142,6 +142,7 @@ if __name__ == '__main__':
         st.write(f"**{prof}**")
         df = df[df['prof']==prof]
         fig = px.scatter(df, x=year_col, y=rating_col, trendline='ols', color='course', trendline_scope = 'overall')
+        fig.update_layout(width=900)
         st.plotly_chart(fig)
 
 
