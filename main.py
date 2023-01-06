@@ -15,8 +15,7 @@ if __name__ == '__main__':
         initial_sidebar_state="expanded"
     )
 
-
-    median_rating, median_workload = 4.434666666666667, 3.3023333333333333
+    median_rating, median_workload = 4.436, 3.308
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
 
     with st.sidebar:
