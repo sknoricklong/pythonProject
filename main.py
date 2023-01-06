@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
 import os
 import plotly.express as px
 import numpy as np
