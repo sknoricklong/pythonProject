@@ -16,8 +16,6 @@ if __name__ == '__main__':
         initial_sidebar_state="expanded"
     )
 
-    # add_logo("https://upload.wikimedia.org/wikipedia/en/thumb/c/c1/John_F._Kennedy_School_of_Government_Shield.svg/130px-John_F._Kennedy_School_of_Government_Shield.svg.png")
-
 
     median_rating, median_workload = 4.434666666666667, 3.3023333333333333
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
