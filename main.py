@@ -21,7 +21,7 @@ if __name__ == '__main__':
     with st.sidebar:
         st.info(
             """
-            Compare HKS courses for Spring 2023, using data from 3,000+ course evaluations on KNET.
+            **About:** Compare HKS courses for Spring 2023, using data from 3,000+ course evaluations on KNET.
             """)
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options)
