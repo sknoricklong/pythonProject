@@ -23,7 +23,7 @@ if __name__ == '__main__':
             """
             Compare HKS courses for Spring 2023, using data from 3,000+ course evaluations on KNET.
             """)
-        options = ["Search for courses", "See all courses"]
+        options = ["See all courses", "Search for courses"]
         type = st.radio("", options)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate")
