@@ -23,6 +23,16 @@ if __name__ == '__main__':
             """
             Compare HKS courses for Spring 2023, using data from 3,000+ course evaluations on KNET.
             """)
+        options = ["Search for courses", "See all courses"]
+        type = st.radio("", options)
+        if type == "Search for courses":
+            selected = st.text_input("Add search terms, separated by comma:", "environment, climate")
+            selected = selected.split(',')
+            df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) | df_full[
+                "course_name"].str.contains('|'.join(selected), case=False)]
+        elif type == "See all courses":
+            df = df_full.copy()
+
         # Term Selection
         st.markdown("**Filter by Session:**")
         full_term = st.checkbox("Full Term", value=True)
@@ -97,17 +107,6 @@ if __name__ == '__main__':
         st.plotly_chart(fig)
 
     st.header("🗓️ Compare Spring 2023 Courses at HKS")
-
-    options = ["Search for courses", "See all courses"]
-    type = st.radio("", options)
-    if type == "Search for courses":
-        selected = st.text_input("Add search terms, separated by comma:", "environment, climate")
-        selected = selected.split(',')
-        df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) | df_full[
-            "course_name"].str.contains('|'.join(selected), case=False)]
-    elif type == "See all courses":
-        df = df_full.copy()
-
     plot_scatterplot(df)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
