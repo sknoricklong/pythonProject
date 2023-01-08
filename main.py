@@ -178,6 +178,7 @@ if __name__ == '__main__':
         st.plotly_chart(fig)
 
     st.header("🗓️ Compare Spring 2023 Courses at HKS")
+    st.info("📊 Data from 3,000 course evaluations on KNET")
     plot_scatterplot(df)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
