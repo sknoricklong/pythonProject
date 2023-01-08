@@ -24,7 +24,6 @@ if __name__ == '__main__':
         #     """
         #     **About:** Compare Spring 2023 courses at HKS, from 3,000+ evaluations on KNET.
         #     """)
-        st.info("📊 Data from 3,000 evaluations on KNET")
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
         if type == "Search for courses":
@@ -42,6 +41,8 @@ if __name__ == '__main__':
         spring_1 = st.checkbox("Spring 1", value=True)
         spring_2 = st.checkbox("Spring 2", value=True)
         january = st.checkbox("January", value=False)
+
+        st.info("📊 Data from 3,000 evaluations on KNET")
 
 
 
