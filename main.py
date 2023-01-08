@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import os
 import plotly.express as px
+import plotly.graph_objects as go
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels
@@ -18,18 +19,23 @@ if __name__ == '__main__':
     median_rating, median_workload = 4.436, 3.308
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
 
+    def get_text_url(url):
+        return f'<a href="{url}"</a>'
+    df_full['course_link'] = df_full['url'].apply(get_text_url)
+
     with st.sidebar:
         st.info(
             """
-            **About:** Compare HKS courses for Spring 2023, using data from 3,000+ course evaluations on KNET.
+            **About:** Compare Spring 2023 courses at HKS, using data from 3,000+ evaluations on KNET.
             """)
         options = ["See all courses", "Search for courses"]
-        type = st.radio("", options)
+        type = st.radio("", options, index=1)
         if type == "Search for courses":
-            selected = st.text_input("Add search terms, separated by comma:", "environment, climate")
-            selected = selected.split(',')
-            df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) | df_full[
-                "course_name"].str.contains('|'.join(selected), case=False)]
+            selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
+            selected = [string.strip() for string in selected.split(',')]
+            df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) |
+                         df_full["course_name"].str.contains('|'.join(selected), case=False) |
+                         df_full["professor"].str.contains('|'.join(selected), case=False)]
         elif type == "See all courses":
             df = df_full.copy()
 
@@ -53,7 +59,7 @@ if __name__ == '__main__':
 
 
     def plot_scatterplot(df):
-        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name=f"course_name", hover_data=['prof_search', 'mean_rating', 'mean_workload'],
+        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="course_name", hover_data=['prof_search', 'mean_rating', 'mean_workload'],
                          labels=dict(prof_search='Professor', mean_rating='Average Professor Rating', mean_workload='Average Professor Workload'))
         fig.update_layout(width=900)
         # Add horizontal line
@@ -101,9 +107,74 @@ if __name__ == '__main__':
                            ax=-25,
                            font_color='grey')
 
+        fig.add_shape(type="rect",
+                      xref="x", yref="y",
+                      x0=4.79, y0=2.05,
+                      x1=5.015, y1=2.2,
+                      line=dict(
+                          color="LightSeaGreen",
+                          width=0,
+                      ),
+                      fillcolor="limegreen",
+                      opacity=0.5,
+                      layer='below'
+                      )
+
+        fig.add_shape(type="rect",
+                      xref="x", yref="y",
+                      x0=3.72, y0=4.30,
+                      x1=3.945, y1=4.45,
+                      line=dict(
+                          color="LightSeaGreen",
+                          width=0,
+                      ),
+                      fillcolor="orangered",
+                      opacity=0.5,
+                      layer='below'
+                      )
+
+        fig.add_shape(type="rect",
+                      xref="x", yref="y",
+                      x0=3.72, y0=2.05,
+                      x1=3.945, y1=2.20,
+                      line=dict(
+                          color="LightSeaGreen",
+                          width=0,
+                      ),
+                      fillcolor="lightgrey",
+                      opacity=0.5,
+                      layer='below'
+                      )
+
+        fig.add_shape(type="rect",
+                      xref="x", yref="y",
+                      x0=4.79, y0=4.30,
+                      x1=5.015, y1=4.45,
+                      line=dict(
+                          color="LightSeaGreen",
+                          width=0,
+                      ),
+                      fillcolor="lightgrey",
+                      opacity=0.5,
+                      layer='below'
+                      )
+
+
+        fig.add_trace(go.Scatter(
+            x=[4.9, 3.83, 3.83, 4.9],
+            y=[2.125, 4.375, 2.125, 4.375],
+            text=["Better prof, less effort",
+                  "Worse prof, more effort",
+                  "Worse prof, less effort",
+                  "Better prof, more effort"],
+            mode="text",
+        ))
+
         fig.update_xaxes(range=[3.7, 5.025])
         fig.update_yaxes(range=[2, 4.5])
+        fig.update_layout(showlegend=False)
 
+        fig.update_layout(uniformtext_minsize=15)
         st.plotly_chart(fig)
 
     st.header("🗓️ Compare Spring 2023 Courses at HKS")
@@ -113,10 +184,12 @@ if __name__ == '__main__':
     df.reset_index(drop=True, inplace=True)
 
     st.header("🥇 Courses Ranked by  Professor's Average Rating")
-    df_with_previous = df[['course_name', 'course_id', 'professor', 'session', 'days', 'time', 'course_description', 'mean_rating', 'mean_workload']].sort_values(by=['mean_rating', 'mean_workload'], ascending=[False, True]).reset_index(drop=True)
+    st.info("👉 Scroll right for course url on my.harvard.edu")
+    df_with_previous = df[['course_name', 'professor', 'mean_rating', 'mean_workload', 'session', 'days', 'time', 'course_id', 'course_description', 'url']].sort_values(by=['mean_rating', 'mean_workload'], ascending=[False, True]).reset_index(drop=True)
     st.write(df_with_previous.dropna(subset=['mean_rating']))
 
     st.header("📈 New Professors")
+    st.info("👉 Scroll right for course url on my.harvard.edu")
     st.write(df_with_previous[df_with_previous['mean_rating'].isna()].reset_index(drop=True))
 
     # for index, row in df.iterrows():
