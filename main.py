@@ -111,6 +111,10 @@ if __name__ == '__main__':
                       xref="x", yref="y",
                       x0=4.79, y0=2.05,
                       x1=5.015, y1=2.2,
+                      line=dict(
+                          color="LightSeaGreen",
+                          width=0,
+                      ),
                       fillcolor="limegreen",
                       opacity=0.5,
                       layer='below'
