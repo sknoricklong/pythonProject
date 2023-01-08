@@ -24,7 +24,7 @@ if __name__ == '__main__':
         #     """
         #     **About:** Compare Spring 2023 courses at HKS, from 3,000+ evaluations on KNET.
         #     """)
-        st.info("📊 Data from 3,000 course evaluations on KNET")
+        st.info("📊 Data from 3,000 evaluations on KNET")
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
         if type == "Search for courses":
