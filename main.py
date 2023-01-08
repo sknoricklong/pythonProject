@@ -42,8 +42,6 @@ if __name__ == '__main__':
         spring_2 = st.checkbox("Spring 2", value=True)
         january = st.checkbox("January", value=False)
 
-        st.info("📊 Data from 3,000 evaluations on KNET")
-
 
 
     if not january:
