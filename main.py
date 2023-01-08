@@ -19,15 +19,12 @@ if __name__ == '__main__':
     median_rating, median_workload = 4.436, 3.308
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
 
-    def get_text_url(url):
-        return f'<a href="{url}"</a>'
-    df_full['course_link'] = df_full['url'].apply(get_text_url)
-
     with st.sidebar:
         # st.info(
         #     """
         #     **About:** Compare Spring 2023 courses at HKS, from 3,000+ evaluations on KNET.
         #     """)
+        st.info("📊 Data from 3,000 course evaluations on KNET")
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
         if type == "Search for courses":
