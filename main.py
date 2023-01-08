@@ -26,10 +26,10 @@ if __name__ == '__main__':
     with st.sidebar:
         st.info(
             """
-            **About:** Compare Spring 2023 courses at HKS, using data from 3,000+ evaluations on KNET.
+            **About:** Compare Spring 2023 courses at HKS, from 3,000+ evaluations on KNET.
             """)
         options = ["See all courses", "Search for courses"]
-        type = st.radio("", options, index=1)
+        type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
             selected = [string.strip() for string in selected.split(',')]
