@@ -43,7 +43,7 @@ if __name__ == '__main__':
         january = st.checkbox("January", value=False)
 
         st.markdown("")
-        st.markdown("[👉 Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
+        st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
 
 
