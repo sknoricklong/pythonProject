@@ -42,6 +42,7 @@ if __name__ == '__main__':
         spring_2 = st.checkbox("Spring 2", value=True)
         january = st.checkbox("January", value=False)
 
+        st.markdown("")
         st.markdown("[👉 Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
 
