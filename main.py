@@ -174,6 +174,11 @@ if __name__ == '__main__':
         st.plotly_chart(fig)
 
     st.header("🗓️ Compare Spring 2023 Courses at HKS")
+    st.info("""
+    - See courses based on instructor **quality** (horizontal axis) and **workload** (vertical axis), using data from 3,000+ course evaluations on KNET 
+    - Each point represents the **average rating** the professor has received across all courses taught
+    - Explore **all** courses or search **specific** courses
+    """)
     plot_scatterplot(df)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
