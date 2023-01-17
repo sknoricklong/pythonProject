@@ -177,7 +177,7 @@ if __name__ == '__main__':
     st.info("""
     - See courses based on instructor **quality** (horizontal axis) and **workload** (vertical axis), using data from 3,000+ course evaluations on KNET 
     - Each point represents the **average score** the professor has received across all courses taught
-    - Explore **all** courses or search **specific** courses, then hover over the points to see course ratings
+    - Explore **all** courses or search **specific** courses, then hover over the points to see course scores
     """)
     plot_scatterplot(df)
 
