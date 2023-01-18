@@ -28,7 +28,6 @@ if __name__ == '__main__':
         type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
-            print(selected)
             selected = [string.strip() for string in selected.split(',')]
             df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) |
                          df_full["course_name"].str.contains('|'.join(selected), case=False) |
