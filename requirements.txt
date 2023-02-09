@@ -6,3 +6,4 @@ numpy==1.23.5
 matplotlib==3.6.2
 statsmodels==0.13.5
 google-auth==2.16.0
+google-api-python-client
