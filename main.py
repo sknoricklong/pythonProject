@@ -6,6 +6,8 @@ import plotly.graph_objects as go
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels
+from google.oauth2 import service_account
+from google.cloud import bigquery
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -15,6 +17,14 @@ if __name__ == '__main__':
         layout="wide",
         initial_sidebar_state="expanded"
     )
+
+    # Create API client.
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+    client = bigquery.Client(credentials=credentials)
+
+    table_id = "class-377302.class.2023-spring-queries"
 
     median_rating, median_workload = 4.453968253968255, 3.2888768115942053
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
@@ -28,6 +38,15 @@ if __name__ == '__main__':
         type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
+
+            if selected != 'environment, climate, rosenbach':
+                row_to_insert = [
+                {"query": selected},
+                ]
+                errors = client.insert_rows_json(
+                    table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
+                )
+
             selected = [string.strip() for string in selected.split(',')]
             df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) |
                          df_full["course_name"].str.contains('|'.join(selected), case=False) |
