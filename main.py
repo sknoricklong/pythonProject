@@ -38,16 +38,16 @@ if __name__ == '__main__':
         type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
+            selected = [string.strip() for string in selected.split(',')]
 
-            if selected != 'environment, climate, rosenbach':
+            if selected != ['environment', 'climate', 'rosenbach']:
                 row_to_insert = [
-                {"query": selected},
+                {"query": x} for x in selected
                 ]
                 errors = client.insert_rows_json(
                     table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
                 )
 
-            selected = [string.strip() for string in selected.split(',')]
             df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) |
                          df_full["course_name"].str.contains('|'.join(selected), case=False) |
                          df_full["professor"].str.contains('|'.join(selected), case=False)]
