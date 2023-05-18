@@ -6,8 +6,6 @@ import plotly.graph_objects as go
 import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels
-from google.oauth2 import service_account
-from google.cloud import bigquery
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -18,35 +16,15 @@ if __name__ == '__main__':
         initial_sidebar_state="expanded"
     )
 
-    # Create API client.
-    credentials = service_account.Credentials.from_service_account_info(
-        st.secrets["gcp_service_account"]
-    )
-    client = bigquery.Client(credentials=credentials)
-
-    table_id = "class-377302.class.2023-spring-queries"
-
     median_rating, median_workload = 4.453968253968255, 3.2888768115942053
     df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
 
     with st.sidebar:
-        # st.info(
-        #     """
-        #     **About:** Compare Spring 2023 courses at HKS, from 3,000+ evaluations on KNET.
-        #     """)
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
             selected = [string.strip() for string in selected.split(',')]
-
-            if selected != ['environment', 'climate', 'rosenbach']:
-                row_to_insert = [
-                {"query": x} for x in selected
-                ]
-                errors = client.insert_rows_json(
-                    table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
-                )
 
             df = df_full[df_full["course_description"].str.contains('|'.join(selected), case=False) |
                          df_full["course_name"].str.contains('|'.join(selected), case=False) |
@@ -64,8 +42,6 @@ if __name__ == '__main__':
         st.markdown("")
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
-
-
     if not january:
         df = df[df['session'] != 'January']
     if not spring_1:
@@ -74,7 +50,6 @@ if __name__ == '__main__':
         df = df[df['session'] != 'Spring 2']
     if not full_term:
         df = df[df['session'] != 'Full Term']
-
 
     def plot_scatterplot(df):
         fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="course_name", hover_data=['prof_search', 'mean_rating', 'mean_workload'],
