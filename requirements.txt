@@ -8,4 +8,3 @@ statsmodels==0.13.5
 google-auth==2.16.0
 google-api-python-client
 google-cloud-bigquery==3.5.0
-altair==4.2.2
