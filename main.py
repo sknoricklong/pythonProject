@@ -1,11 +1,8 @@
 import pandas as pd
 import streamlit as st
-import os
 import plotly.express as px
 import plotly.graph_objects as go
-import numpy as np
-import matplotlib.pyplot as plt
-import statsmodels
+import datetime
 from google.oauth2 import service_account
 from google.cloud import bigquery
 
@@ -39,8 +36,9 @@ if __name__ == '__main__':
             selected = [string.strip() for string in selected.split(',')]
 
             if selected != ['environment', 'climate', 'rosenbach']:
+                now = datetime.datetime.utcnow()  # Use UTC time to avoid timezone confusion
                 row_to_insert = [
-                    {"query": x} for x in selected
+                    {"query": x, "timestamp": now} for x in selected
                 ]
                 errors = client.insert_rows_json(
                     table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
