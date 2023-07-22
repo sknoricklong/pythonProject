@@ -17,7 +17,7 @@ if __name__ == '__main__':
     )
 
     median_rating, median_workload = 4.453968253968255, 3.2888768115942053
-    df_full = pd.read_csv("./spring_2023_courses_cleaned.csv")
+    df_full = pd.read_csv("./fall_2023_courses_cleaned.csv")
 
     with st.sidebar:
         options = ["See all courses", "Search for courses"]
@@ -35,19 +35,16 @@ if __name__ == '__main__':
         # Term Selection
         st.markdown("**Filter by Session:**")
         full_term = st.checkbox("Full Term", value=True)
-        spring_1 = st.checkbox("Spring 1", value=True)
-        spring_2 = st.checkbox("Spring 2", value=True)
-        january = st.checkbox("January", value=False)
+        fall_1 = st.checkbox("Fall 1", value=True)
+        fall_2 = st.checkbox("Fall 2", value=True)
 
         st.markdown("")
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
-    if not january:
-        df = df[df['session'] != 'January']
-    if not spring_1:
-        df = df[df['session'] != 'Spring 1']
-    if not spring_2:
-        df = df[df['session'] != 'Spring 2']
+    if not fall_1:
+        df = df[df['session'] != 'Fall 1']
+    if not fall_2:
+        df = df[df['session'] != 'Fall 2']
     if not full_term:
         df = df[df['session'] != 'Full Term']
 
@@ -170,7 +167,7 @@ if __name__ == '__main__':
         fig.update_layout(uniformtext_minsize=15)
         st.plotly_chart(fig)
 
-    st.header("🗓️ Compare Spring 2023 Courses at HKS")
+    st.header("🗓️ Compare Fall 2023 Courses at HKS")
     st.info("""
     - See courses based on instructor **quality** (horizontal axis) and **workload** (vertical axis), using data from 3,000+ course evaluations on KNET 
     - Each point represents the **average score** the professor has received across all courses taught
