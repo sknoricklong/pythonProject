@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import datetime
 from google.oauth2 import service_account
 from google.cloud import bigquery
+import re
 
 
 # Press the green button in the gutter to run the script.
@@ -28,6 +29,8 @@ if __name__ == '__main__':
     median_rating = df_full['mean_rating'].median()
     median_workload = df_full['mean_workload'].median()
 
+    last_selected = None
+
     with st.sidebar:
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
@@ -35,22 +38,26 @@ if __name__ == '__main__':
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
             selected = [string.strip() for string in selected.split(',')]
 
-            if selected != ['environment', 'climate', 'rosenbach']:
-                now = datetime.datetime.utcnow()  # Use UTC time to avoid timezone confusion
+            current_time = datetime.datetime.now().isoformat()
+
+            # Check if the selected values are different from the default values and the last selected values
+            if selected != ['environment', 'climate', 'rosenbach'] and selected != last_selected:
                 row_to_insert = [
-                    {"query": x, "timestamp": now} for x in selected
+                    {"query": x, "timestamp": current_time} for x in selected
                 ]
                 errors = client.insert_rows_json(
                     table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
                 )
+                last_selected = selected
 
-            df = df_full[df_full["description"].str.contains('|'.join(selected), case=False) |
-                         df_full["course_name"].str.contains('|'.join(selected), case=False) |
-                         df_full["course_code"].str.contains('|'.join(selected), case=False) |
-                         df_full["professor"].str.contains('|'.join(selected), case=False)]
+            regex_pattern = '|'.join(r'\b{}\b'.format(word) for word in selected)
+
+            df = df_full[(df_full["description"].str.contains(regex_pattern, case=False, regex=True)) |
+                         (df_full["course_name"].str.contains(regex_pattern, case=False, regex=True)) |
+                         (df_full["course_code"].str.contains(regex_pattern, case=False, regex=True)) |
+                         (df_full["professor"].str.contains(regex_pattern, case=False, regex=True))]
         elif type == "See all courses":
             df = df_full.copy()
-
 
         # Term Selection
         st.markdown("**Filter by Term:**")
