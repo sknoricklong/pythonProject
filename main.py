@@ -36,12 +36,13 @@ if __name__ == '__main__':
         type = st.radio("", options, index=0)
         if type == "Search for courses":
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
-            selected = [string.strip() for string in selected.split(',')]
+            selected = [string.strip() for string in selected.split(',') if string.strip()]
 
             current_time = datetime.datetime.now().isoformat()
 
             # Check if the selected values are different from the default values and the last selected values
-            if selected != ['environment', 'climate', 'rosenbach'] and selected != last_selected:
+            # and that they are not empty or whitespace
+            if selected and selected != ['environment', 'climate', 'rosenbach'] and selected != last_selected:
                 row_to_insert = [
                     {"query": x, "timestamp": current_time} for x in selected
                 ]
