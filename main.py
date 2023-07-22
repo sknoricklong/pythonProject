@@ -16,9 +16,9 @@ if __name__ == '__main__':
     )
 
 
-    # df_full = pd.read_csv("./fall_2023_courses_cleaned.csv")
-    # median_rating = df_full['mean_rating'].median()
-    # median_workload = df_full['mean_workload'].median()
+    df_full = pd.read_csv("./fall_2023_courses_cleaned.csv")
+    median_rating = df_full['mean_rating'].median()
+    median_workload = df_full['mean_workload'].median()
 
     # with st.sidebar:
     #     options = ["See all courses", "Search for courses"]
