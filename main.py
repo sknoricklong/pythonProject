@@ -81,11 +81,13 @@ if __name__ == '__main__':
 
 
     def plot_scatterplot(df):
-        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="course_name", hover_data=['prof_search', 'mean_rating', 'mean_workload'],
-                         labels=dict(prof_search='Professor', mean_rating='Average Professor Rating', mean_workload='Average Professor Workload'))
+        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="course_name",
+                         hover_data=['prof_search', 'mean_rating', 'mean_workload', 'term'],
+                         labels=dict(prof_search='Professor', mean_rating='Average Professor Rating',
+                                     mean_workload='Average Professor Workload', term='Term'))
         fig.update_layout(width=900)
-        # Add horizontal line
 
+        # Add horizontal line
         fig.add_shape(
             type='line',
             x0=median_rating,
