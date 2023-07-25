@@ -196,7 +196,7 @@ if __name__ == '__main__':
         ))
 
         fig.update_xaxes(range=[3.7, 5.025])
-        fig.update_yaxes(range=[2, 4.6])
+        fig.update_yaxes(range=[2, 4.7])
         fig.update_layout(showlegend=False)
 
         fig.update_layout(uniformtext_minsize=15)
