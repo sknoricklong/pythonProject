@@ -132,62 +132,53 @@ if __name__ == '__main__':
                            ax=-25,
                            font_color='grey')
 
+        # Rectangle 1
         fig.add_shape(type="rect",
                       xref="x", yref="y",
                       x0=4.79, y0=2.05,
                       x1=5.015, y1=2.2,
-                      line=dict(
-                          color="LightSeaGreen",
-                          width=0,
-                      ),
+                      line=dict(color="LightSeaGreen", width=0),
                       fillcolor="limegreen",
                       opacity=0.5,
                       layer='below'
                       )
 
+        # Rectangle 2
         fig.add_shape(type="rect",
                       xref="x", yref="y",
-                      x0=3.72, y0=4.175,
-                      x1=3.945, y1=4.325,
-                      line=dict(
-                          color="LightSeaGreen",
-                          width=0,
-                      ),
+                      x0=3.72, y0=4.675,
+                      x1=3.945, y1=4.825,
+                      line=dict(color="LightSeaGreen", width=0),
                       fillcolor="orangered",
                       opacity=0.5,
                       layer='below'
                       )
 
+        # Rectangle 3
         fig.add_shape(type="rect",
                       xref="x", yref="y",
                       x0=3.72, y0=2.05,
-                      x1=3.945, y1=2.20,
-                      line=dict(
-                          color="LightSeaGreen",
-                          width=0,
-                      ),
+                      x1=3.945, y1=2.2,
+                      line=dict(color="LightSeaGreen", width=0),
                       fillcolor="lightgrey",
                       opacity=0.5,
                       layer='below'
                       )
 
+        # Rectangle 4
         fig.add_shape(type="rect",
                       xref="x", yref="y",
-                      x0=4.79, y0=4.175,
-                      x1=5.015, y1=4.325,
-                      line=dict(
-                          color="LightSeaGreen",
-                          width=0,
-                      ),
+                      x0=4.79, y0=4.675,
+                      x1=5.015, y1=4.825,
+                      line=dict(color="LightSeaGreen", width=0),
                       fillcolor="lightgrey",
                       opacity=0.5,
                       layer='below'
                       )
-
 
         fig.add_trace(go.Scatter(
             x=[4.9, 3.83, 3.83, 4.9],
-            y=[2.125, 4.25, 2.125, 4.25],
+            y=[2.125, 4.735, 2.125, 4.735],
             text=["Better prof, less effort",
                   "Worse prof, more effort",
                   "Worse prof, less effort",
@@ -196,7 +187,7 @@ if __name__ == '__main__':
         ))
 
         fig.update_xaxes(range=[3.7, 5.025])
-        fig.update_yaxes(range=[2, 4.73])
+        fig.update_yaxes(range=[2, 4.8])
         fig.update_layout(showlegend=False)
 
         fig.update_layout(uniformtext_minsize=15)
