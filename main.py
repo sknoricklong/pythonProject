@@ -72,6 +72,7 @@ if __name__ == '__main__':
                                    st.checkbox(concentration, value=True, key=concentration)]
 
         st.markdown("")
+        st.markdown("😎 [Buy HKS Swag](https://kennedyswag.creator-spring.com/)")
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
         if selected_terms:
