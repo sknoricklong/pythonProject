@@ -51,7 +51,7 @@ if __name__ == '__main__':
                 )
                 last_selected = selected
 
-            regex_pattern = '|'.join(r'\b{}\b'.format(word) for word in selected)
+            regex_pattern = '|'.join(selected)
 
             df = df_full[(df_full["description"].str.contains(regex_pattern, case=False, regex=True)) |
                          (df_full["course_name"].str.contains(regex_pattern, case=False, regex=True)) |
