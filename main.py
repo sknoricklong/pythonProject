@@ -144,7 +144,7 @@ if __name__ == '__main__':
                            showarrow=True,
                            arrowhead=1,
                            arrowcolor='grey',
-                           ax=-55,
+                           ax=55,
                            font_color='grey')
 
         fig.add_annotation(x=3.8, y=median_workload,
