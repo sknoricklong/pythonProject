@@ -81,12 +81,25 @@ if __name__ == '__main__':
         if selected_concentrations:
             df = df[df['concentration'].isin(selected_concentrations)]
 
+    # Group by professor and aggregate course information
+    grouped = df.groupby('professor').agg(
+        mean_rating=('mean_rating', 'mean'),
+        mean_workload=('mean_workload', 'mean'),
+        courses=('course_name', lambda x: '<br>'.join([f"({i + 1}) {course}" for i, course in enumerate(x)]))
+    ).reset_index()
+
 
     def plot_scatterplot(df):
-        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="course_name",
-                         hover_data=['prof_search', 'mean_rating', 'mean_workload', 'term'],
-                         labels=dict(prof_search='Professor', mean_rating='Average Professor Rating',
-                                     mean_workload='Average Professor Workload', term='Term'))
+        fig = px.scatter(df, x='mean_rating', y='mean_workload', hover_name="professor",
+                         labels=dict(courses='Courses Taught', mean_rating='Average Professor Rating',
+                                     mean_workload='Average Professor Workload'))
+
+        hovertemplate = "<b>%{hovertext}</b><br><b>Courses:</b><br>%{customdata[0]}<br><b>Average Rating:</b> %{customdata[1]:.2f}<br><b>Average Workload:</b> %{customdata[2]:.2f}"
+        fig.update_traces(customdata=df[['courses', 'mean_rating', 'mean_workload']].values,
+                          hovertemplate=hovertemplate)
+
+        fig.update_layout(hoverlabel=dict(font_size=12))
+
         fig.update_layout(width=900)
 
         # Add horizontal line
@@ -200,7 +213,7 @@ if __name__ == '__main__':
     - Each point represents the **average score** the professor has received across their 3 most recent courses taught
     - Explore **all** courses or search **specific** courses, then hover over the points to see course scores
     """)
-    plot_scatterplot(df)
+    plot_scatterplot(grouped)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
     df.reset_index(drop=True, inplace=True)
