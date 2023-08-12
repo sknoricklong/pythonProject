@@ -38,6 +38,15 @@ if __name__ == '__main__':
             selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
             selected = [string.strip() for string in selected.split(',') if string.strip()]
 
+            # Process selected terms
+            for idx, term in enumerate(selected):
+                # Replace 3 letters followed by a space and then 3 numbers with a hyphen in place of the space
+                selected[idx] = re.sub(r'([A-Za-z]{3}) (\d{3})', r'\1-\2', term)
+
+                # Replace the term "PDIA" with "PDD"
+                if term.upper() == "PDIA":
+                    selected[idx] = "PDD"
+
             current_time = datetime.datetime.now().isoformat()
 
             # Check if the selected values are different from the default values and the last selected values
