@@ -70,15 +70,31 @@ if __name__ == '__main__':
             df = df_full.copy()
 
         # Term Selection
-        st.markdown("**Filter by Term:**")
         unique_terms = df['term'].dropna().unique().tolist()
-        selected_terms = [term for term in unique_terms if st.checkbox(term, value=True, key=term)]
+        selected_terms = st.multiselect("Select Terms", unique_terms, default=unique_terms)
+
+        # Concentration Abbreviations
+        concentration_abbreviations = {
+            'Analysis of Policies and Institutions': 'API',
+            'Business and Government Policy': 'BGP',
+            'Democracy, Politics and Institutions': 'DPI',
+            'International Development': 'ID',
+            'International and Global Affairs': 'IGA',
+            'Management, Leadership, and Decision Sciences': 'MLD',
+            'Social and Urban Policy': 'SUP'
+        }
 
         # Concentration Selection
-        st.markdown("**Filter by Concentration:**")
         unique_concentrations = sorted(df['concentration'].dropna().unique().tolist())
-        selected_concentrations = [concentration for concentration in unique_concentrations if
-                                   st.checkbox(concentration, value=True, key=concentration)]
+        # Replace concentrations with their abbreviations for display purposes
+        display_concentrations = [concentration_abbreviations.get(concentration, concentration) for concentration in
+                                  unique_concentrations]
+        selected_display_concentrations = st.multiselect("Select Concentrations", display_concentrations,
+                                                         default=display_concentrations)
+
+        # Convert selected display abbreviations back to full concentration names for lookups
+        selected_concentrations = [key for key, value in concentration_abbreviations.items() if
+                                   value in selected_display_concentrations]
 
         st.markdown("")
         st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
@@ -237,4 +253,3 @@ if __name__ == '__main__':
     df_new_professors = df_with_previous[df_with_previous['mean_rating'].isna()].reset_index(drop=True)
     df_new_professors = df_new_professors.drop(columns=['mean_rating', 'mean_workload'])
     st.write(df_new_professors)
-
