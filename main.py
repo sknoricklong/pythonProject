@@ -97,7 +97,7 @@ if __name__ == '__main__':
                                    value in selected_display_concentrations]
 
         st.markdown("")
-        st.markdown("😎 [Buy HKS Swag ](https://bit.ly/hks-swag-tool)")
+        st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
         if selected_terms:
