@@ -47,6 +47,18 @@ if __name__ == '__main__':
                 if term.upper() == "PDIA":
                     selected[idx] = "PDD"
 
+
+            def convert_to_last_first(name):
+                # If the name has a space, assume it's in the "FIRST LAST" format and convert it
+                if ' ' in name:
+                    first, last = name.split(' ', 1)
+                    return f"{last}, {first}"
+                return name
+
+
+            # Update the selected terms list to also include the alternative "LAST, FIRST" format for names
+            selected += [convert_to_last_first(term) for term in selected if ' ' in term]
+
             current_time = datetime.datetime.now().isoformat()
 
             # Check if the selected values are different from the default values and the last selected values
