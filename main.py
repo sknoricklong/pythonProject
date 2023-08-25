@@ -289,7 +289,7 @@ if __name__ == '__main__':
     st.header("🗓️ Compare Fall 2023 Courses at HKS")
     st.info("""
         - Explore courses by instructor **quality** and **workload**; each point is a professor's average score from their 3 latest courses
-        - Hover over points to see course scores and bidding history; explore **all** or **specific** courses
+        - Hover over points to see course scores and bidding history; filter for **all** or **specific** courses
         - **Pink** dots indicate courses that have gone to **bidding**
         """)
     plot_scatterplot(grouped)
