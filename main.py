@@ -288,11 +288,10 @@ if __name__ == '__main__':
 
     st.header("🗓️ Compare Fall 2023 Courses at HKS")
     st.info("""
-    - See courses based on instructor **quality** (horizontal axis) and **workload** (vertical axis)
-    - Each point represents the **average score** the professor has received across their 3 most recent courses taught
-    - Explore **all** courses or search **specific** courses, then hover over the points to see course scores
-    """)
-
+        - Explore courses by instructor **quality** and **workload**; each point is a professor's average score from their 3 latest courses
+        - Hover over points to see course scores and bidding history; explore **all** or **specific** courses
+        - **Pink** dots indicate courses that have gone to **bidding**
+        """)
     plot_scatterplot(grouped)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
