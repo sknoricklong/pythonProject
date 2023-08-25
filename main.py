@@ -126,12 +126,30 @@ if __name__ == '__main__':
         st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
+
+    def custom_aggregation(x):
+        if any(x > 0):
+            # Return the course name, clearing price, and the corresponding recent bidding term for the highest clearing price
+            max_clearing_price_index = x.idxmax()
+            return df.loc[max_clearing_price_index, 'course_name'], int(
+                df.loc[max_clearing_price_index, 'clearing_price']), df.loc[
+                max_clearing_price_index, 'recent_bidding_term']
+        return None, None, None
+
+
     # Group by professor and aggregate course information
     grouped = df.groupby('professor').agg(
         mean_rating=('mean_rating', 'mean'),
         mean_workload=('mean_workload', 'mean'),
-        courses=('course_name', lambda x: '<br>'.join([f"({i + 1}) {course}" for i, course in enumerate(x)]))
+        courses=('course_name', lambda x: '<br>'.join([f"({i + 1}) {course}" for i, course in enumerate(x)])),
+        bidding_data=('clearing_price', custom_aggregation)
+        # This will contain a tuple (course_name, clearing_price, recent_bidding_term)
     ).reset_index()
+
+    grouped['bidding_course_name'] = grouped['bidding_data'].apply(lambda x: x[0])
+    grouped['clearing_price'] = grouped['bidding_data'].apply(lambda x: x[1])
+    grouped['recent_bidding_term'] = grouped['bidding_data'].apply(lambda x: x[2])
+    grouped.drop(columns=['bidding_data'], inplace=True)
 
 
     def plot_scatterplot(df):
@@ -139,12 +157,26 @@ if __name__ == '__main__':
                          labels=dict(courses='Courses Taught', mean_rating='Average Professor Rating',
                                      mean_workload='Average Professor Workload'))
 
-        hovertemplate = "<b>%{hovertext}</b><br><b>Courses:</b><br>%{customdata[0]}<br><b>Average Rating:</b> %{customdata[1]:.2f}<br><b>Average Workload:</b> %{customdata[2]:.2f}"
-        fig.update_traces(customdata=df[['courses', 'mean_rating', 'mean_workload']].values,
-                          hovertemplate=hovertemplate)
+        # Determine colors for each dot
+        colors = df['clearing_price'].apply(lambda x: 'magenta' if x > 0 else 'blue').tolist()
+
+        def create_hovertemplate(row):
+            template = ("<b>%{hovertext}</b><br><b>Courses:</b><br>%{customdata[0]}<br>"
+                        "<b>Average Rating:</b> %{customdata[1]:.2f}<br><b>Average Workload:</b> %{customdata[2]:.2f}")
+            if pd.notna(row['clearing_price']):
+                template += (
+                    "<br>────────────<br><b>Most Recent Bidding:</b> %{customdata[5]} — %{customdata[3]} points in %{customdata[4]}")
+            return template
+
+        hovertemplates = df.apply(create_hovertemplate, axis=1)
+
+        fig.update_traces(
+            marker=dict(color=colors, line=dict(width=0, color='DarkSlateGrey')),
+            customdata=df[['courses', 'mean_rating', 'mean_workload', 'clearing_price', 'recent_bidding_term',
+                           'bidding_course_name']].values,
+            hovertemplate=hovertemplates)
 
         fig.update_layout(hoverlabel=dict(font_size=12))
-
         fig.update_layout(width=900)
 
         # Add horizontal line
@@ -250,7 +282,9 @@ if __name__ == '__main__':
         fig.update_layout(showlegend=False)
 
         fig.update_layout(uniformtext_minsize=15)
+
         st.plotly_chart(fig)
+
 
     st.header("🗓️ Compare Fall 2023 Courses at HKS")
     st.info("""
@@ -258,6 +292,7 @@ if __name__ == '__main__':
     - Each point represents the **average score** the professor has received across their 3 most recent courses taught
     - Explore **all** courses or search **specific** courses, then hover over the points to see course scores
     """)
+
     plot_scatterplot(grouped)
 
     df.sort_values(by='mean_rating', ascending=False, inplace=True)
@@ -265,7 +300,10 @@ if __name__ == '__main__':
 
     st.header("🥇 Courses Ranked by  Professor's Average Rating")
     st.info("👉 Scroll right for course url on my.harvard.edu")
-    df_with_previous = df[['course_name', 'professor', 'mean_rating', 'mean_workload', 'term', 'day', 'time', 'course_code', 'description', 'course_link']].sort_values(by=['mean_rating', 'mean_workload'], ascending=[False, True]).reset_index(drop=True)
+    df_with_previous = df[
+        ['course_name', 'professor', 'mean_rating', 'mean_workload', 'term', 'day', 'time', 'course_code',
+         'recent_bidding_term', 'clearing_price', 'description', 'course_link']].sort_values(
+        by=['mean_rating', 'mean_workload'], ascending=[False, True]).reset_index(drop=True)
     st.write(df_with_previous.dropna(subset=['mean_rating']))
 
     st.header("📈 New Professors")
