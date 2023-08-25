@@ -93,20 +93,38 @@ if __name__ == '__main__':
             'International Development': 'ID',
             'International and Global Affairs': 'IGA',
             'Management, Leadership, and Decision Sciences': 'MLD',
-            'Social and Urban Policy': 'SUP'
+            'Social and Urban Policy': 'SUP',
+            'STEM': 'STEM'  # Add STEM to the abbreviations
         }
+
+        # Define the STEM courses
+        stem_courses = [
+            "API-114", "API-141", "API-201", "API-205", "API-209",
+            "API-302", "API-318", "IGA-402", "DPI-640", "DPI-851M",
+            "DPI-703", "MLD-304", "SUP-427"
+        ]
 
         # Concentration Selection
         unique_concentrations = sorted(df['concentration'].dropna().unique().tolist())
+
+        # Add STEM to the unique concentrations list
+        unique_concentrations.append('STEM')
+
         # Replace concentrations with their abbreviations for display purposes
         display_concentrations = [concentration_abbreviations.get(concentration, concentration) for concentration in
                                   unique_concentrations]
         selected_display_concentrations = st.multiselect("Select Concentrations", display_concentrations,
                                                          default=display_concentrations)
 
-        # Convert selected display abbreviations back to full concentration names for lookups
-        selected_concentrations = [key for key, value in concentration_abbreviations.items() if
-                                   value in selected_display_concentrations]
+        # If STEM is selected, fetch only the STEM courses
+        if 'STEM' in selected_display_concentrations:
+            selected_courses = stem_courses
+        else:
+            # Convert selected display abbreviations back to full concentration names for lookups
+            selected_concentrations = [key for key, value in concentration_abbreviations.items() if
+                                       value in selected_display_concentrations]
+            # Fetch the courses for the selected concentrations from the dataframe
+            selected_courses = df[df['concentration'].isin(selected_concentrations)]['course_code'].tolist()
 
         st.markdown("")
         st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
