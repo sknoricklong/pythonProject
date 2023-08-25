@@ -120,13 +120,12 @@ if __name__ == '__main__':
         selected_concentrations = [key for key, value in concentration_abbreviations.items() if
                                    value in selected_display_concentrations]
 
-        # Fetch the courses for the selected concentrations from the dataframe
-        selected_courses = df[df['concentration'].isin(selected_concentrations)]['course_code'].tolist()
-
-        # If STEM is selected, combine the STEM courses with the fetched courses
+        # If STEM is selected, fetch only the STEM courses
         if 'STEM' in selected_concentrations:
-            selected_courses.extend(stem_courses)
-            selected_courses = list(set(selected_courses))  # Ensure there are no duplicates
+            selected_courses = stem_courses
+        else:
+            # Fetch the courses for the selected concentrations from the dataframe
+            selected_courses = df[df['concentration'].isin(selected_concentrations)]['course_code'].tolist()
 
         st.markdown("")
         st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
