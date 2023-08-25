@@ -98,9 +98,11 @@ if __name__ == '__main__':
 
         # Concentration Selection
         unique_concentrations = sorted(df['concentration'].dropna().unique().tolist())
-        # Replace concentrations with their abbreviations for display purposes
+
+        # Add "STEM" to display concentrations
         display_concentrations = [concentration_abbreviations.get(concentration, concentration) for concentration in
-                                  unique_concentrations]
+                                  unique_concentrations] + ['STEM']
+
         selected_display_concentrations = st.multiselect("Select Concentrations", display_concentrations,
                                                          default=display_concentrations)
 
@@ -108,15 +110,21 @@ if __name__ == '__main__':
         selected_concentrations = [key for key, value in concentration_abbreviations.items() if
                                    value in selected_display_concentrations]
 
-        st.markdown("")
-        st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
-        st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
-
+        # Filter by selected terms
         if selected_terms:
             df = df[df['term'].isin(selected_terms)]
 
-        if selected_concentrations:
+        # Filtering by selected concentrations
+        if 'STEM' in selected_display_concentrations and len(selected_concentrations) == 0:
+            df = df[df['stem'] == True]
+        elif 'STEM' in selected_display_concentrations and len(selected_concentrations) > 0:
+            df = df[(df['stem'] == True) | (df['concentration'].isin(selected_concentrations))]
+        elif len(selected_concentrations) > 0:
             df = df[df['concentration'].isin(selected_concentrations)]
+
+        st.markdown("")
+        st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
+        st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
     # Group by professor and aggregate course information
     grouped = df.groupby('professor').agg(
