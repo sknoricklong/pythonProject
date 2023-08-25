@@ -158,7 +158,7 @@ if __name__ == '__main__':
                                      mean_workload='Average Professor Workload'))
 
         # Determine colors for each dot
-        colors = df['clearing_price'].apply(lambda x: 'magenta' if x > 0 else 'blue').tolist()
+        colors = df['clearing_price'].apply(lambda x: 'magenta' if x is not None and x > 0 else 'blue').tolist()
 
         def create_hovertemplate(row):
             template = ("<b>%{hovertext}</b><br><b>Courses:</b><br>%{customdata[0]}<br>"
