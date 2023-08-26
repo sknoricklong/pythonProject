@@ -127,13 +127,13 @@ if __name__ == '__main__':
 
         items = [
             {
-                "image": "pics/hat.png",
+                "image": "hat.png",
                 "link": "https://bit.ly/black-hks-hat",
                 "emoji": "🧢",
                 "text": "Buy HKS Hat"
             },
             {
-                "image": "pics/water_bottle.png",
+                "image": "water_bottle.png",
                 "link": "https://bit.ly/hks-water-bottle",
                 "emoji": "🚰",
                 "text": "Buy HKS Water Bottle"
