@@ -244,7 +244,8 @@ if __name__ == '__main__':
                            ax=55,
                            font_color='grey')
 
-        fig.add_annotation(x=3.8, y=median_workload,
+        # Modified x-coordinate
+        fig.add_annotation(x=3.75, y=median_workload,
                            text="Median",
                            showarrow=True,
                            arrowhead=1,
@@ -306,7 +307,7 @@ if __name__ == '__main__':
             mode="text",
         ))
 
-        fig.update_xaxes(range=[3.7, 5.025])
+        fig.update_xaxes(range=[3.67, 5.025])
         fig.update_yaxes(range=[2, 4.8])
         fig.update_layout(showlegend=False)
 
