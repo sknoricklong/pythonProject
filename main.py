@@ -6,6 +6,7 @@ import datetime
 from google.oauth2 import service_account
 from google.cloud import bigquery
 import re
+import random
 
 
 # Press the green button in the gutter to run the script.
@@ -123,7 +124,29 @@ if __name__ == '__main__':
             df = df[df['concentration'].isin(selected_concentrations)]
 
         st.markdown("")
-        st.markdown("😎 [Buy HKS Swag](https://bit.ly/hks-swag-tool)")
+
+        items = [
+            {
+                "image": "pics/hat.png",
+                "link": "https://bit.ly/black-hks-hat",
+                "emoji": "🧢",
+                "text": "Buy HKS Hat"
+            },
+            {
+                "image": "pics/water_bottle.png",
+                "link": "https://bit.ly/hks-water-bottle",
+                "emoji": "🚰",
+                "text": "Buy HKS Water Bottle"
+            }
+        ]
+
+        # Shuffle the items
+        random.shuffle(items)
+
+        for item in items:
+            st.image(item["image"], width=150)
+            st.markdown(f'{item["emoji"]} [{item["text"]}]({item["link"]})')
+
         st.markdown("👉 [Feedback?](https://forms.gle/dVQtp7XwVhqnv5Dw8)")
 
 
