@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 "image": "hat.png",
                 "link": "https://bit.ly/black-hks-hat",
                 "emoji": "🧢",
-                "text": "Buy HKS Black Hat"
+                "text": "Buy HKS Black Cap"
             },
             {
                 "image": "water_bottle.png",
@@ -142,7 +142,7 @@ if __name__ == '__main__':
                 "image": "red_hat.png",
                 "link": "https://bit.ly/hks-red-hat",
                 "emoji": "🧢",
-                "text": "Buy HKS Vintage Hat"
+                "text": "Buy HKS Vintage Cap"
             }
         ]
 
