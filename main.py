@@ -35,21 +35,19 @@ if __name__ == '__main__':
     with st.sidebar:
         options = ["See all courses", "Search for courses"]
         type = st.radio("", options, index=0)
+
         if type == "Search for courses":
-            selected = st.text_input("Add search terms, separated by comma:", "environment, climate, rosenbach")
-            selected = [string.strip() for string in selected.split(',') if string.strip()]
+            selected_term = st.text_input("Add search term:", "environment").strip()
 
-            # Process selected terms
-            for idx, term in enumerate(selected):
-                # Replace 3 letters followed by a space and then 3 numbers with a hyphen in place of the space
-                selected[idx] = re.sub(r'([A-Za-z]{3}) (\d{3})', r'\1-\2', term)
+            # Replace 3 letters followed by a space and then 3 numbers with a hyphen in place of the space
+            selected_term = re.sub(r'([A-Za-z]{3}) (\d{3})', r'\1-\2', selected_term)
 
-                # Replace 3 letters immediately followed by 3 numbers with a hyphen in between
-                selected[idx] = re.sub(r'([A-Za-z]{3})(\d{3})', r'\1-\2', selected[idx])
+            # Replace 3 letters immediately followed by 3 numbers with a hyphen in between
+            selected_term = re.sub(r'([A-Za-z]{3})(\d{3})', r'\1-\2', selected_term)
 
-                # Replace the term "PDIA" with "PDD"
-                if term.upper() == "PDIA":
-                    selected[idx] = "PDD"
+            # Replace the term "PDIA" with "PDD"
+            if selected_term.upper() == "PDIA":
+                selected_term = "PDD"
 
 
             def convert_to_last_first(name):
@@ -60,28 +58,26 @@ if __name__ == '__main__':
                 return name
 
 
-            # Update the selected terms list to also include the alternative "LAST, FIRST" format for names
-            selected += [convert_to_last_first(term) for term in selected if re.match(r'^[A-Za-z]+ [A-Za-z]+$', term)]
+            # If the name is in "FIRST LAST" format, also search for "LAST, FIRST" format
+            alternate_term = convert_to_last_first(selected_term) if re.match(r'^[A-Za-z]+ [A-Za-z]+$',
+                                                                              selected_term) else None
 
             current_time = datetime.datetime.now().isoformat()
 
-            # Check if the selected values are different from the default values and the last selected values
-            # and that they are not empty or whitespace
-            if selected and selected != ['environment', 'climate', 'rosenbach'] and selected != last_selected:
-                row_to_insert = [
-                    {"query": x, "timestamp": current_time} for x in selected
-                ]
-                errors = client.insert_rows_json(
-                    table_id, row_to_insert, row_ids=[None] * len(row_to_insert)
-                )
-                last_selected = selected
+            # Check if the selected value is different from the default value and the last selected value
+            # and that it's not empty or whitespace
+            if selected_term and selected_term != 'environment' and selected_term != last_selected:
+                row_to_insert = [{"query": selected_term, "timestamp": current_time}]
+                errors = client.insert_rows_json(table_id, row_to_insert, row_ids=[None] * len(row_to_insert))
+                last_selected = selected_term
 
-            regex_pattern = '|'.join(selected)
+            # If there's an alternate term, add it to the search pattern
+            search_pattern = alternate_term + '|' + selected_term if alternate_term else selected_term
 
-            df = df_full[(df_full["description"].str.contains(regex_pattern, case=False, regex=True)) |
-                         (df_full["course_name"].str.contains(regex_pattern, case=False, regex=True)) |
-                         (df_full["course_code"].str.contains(regex_pattern, case=False, regex=True)) |
-                         (df_full["professor"].str.contains(regex_pattern, case=False, regex=True))]
+            df = df_full[(df_full["description"].str.contains(search_pattern, case=False, regex=True)) |
+                         (df_full["course_name"].str.contains(search_pattern, case=False, regex=True)) |
+                         (df_full["course_code"].str.contains(search_pattern, case=False, regex=True)) |
+                         (df_full["professor"].str.contains(search_pattern, case=False, regex=True))]
         elif type == "See all courses":
             df = df_full.copy()
 
