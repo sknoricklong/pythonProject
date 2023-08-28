@@ -44,21 +44,24 @@ if __name__ == '__main__':
                 # Replace 3 letters followed by a space and then 3 numbers with a hyphen in place of the space
                 selected[idx] = re.sub(r'([A-Za-z]{3}) (\d{3})', r'\1-\2', term)
 
+                # Replace 3 letters immediately followed by 3 numbers with a hyphen in between
+                selected[idx] = re.sub(r'([A-Za-z]{3})(\d{3})', r'\1-\2', selected[idx])
+
                 # Replace the term "PDIA" with "PDD"
                 if term.upper() == "PDIA":
                     selected[idx] = "PDD"
 
 
             def convert_to_last_first(name):
-                # If the name has a space, assume it's in the "FIRST LAST" format and convert it
-                if ' ' in name:
+                # If the name matches the format "FIRST LAST" (all letters), convert it
+                if re.match(r'^[A-Za-z]+ [A-Za-z]+$', name):
                     first, last = name.split(' ', 1)
                     return f"{last}, {first}"
                 return name
 
 
             # Update the selected terms list to also include the alternative "LAST, FIRST" format for names
-            selected += [convert_to_last_first(term) for term in selected if ' ' in term]
+            selected += [convert_to_last_first(term) for term in selected if re.match(r'^[A-Za-z]+ [A-Za-z]+$', term)]
 
             current_time = datetime.datetime.now().isoformat()
 
